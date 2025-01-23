@@ -1,0 +1,150 @@
+header {
+    display: flex;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    padding: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    border: black;
+    box-shadow: 1px 0px 1px;
+  }
+
+.logo-container {
+  display: block;
+  margin-left: 20%;
+}
+
+.nav-logo {
+  width: 182px;
+  height: 90px;
+}
+
+.nav-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin-right: 12.2%;
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.nav-item {
+  position: relative;
+  font-size: 18px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.nav-item a:hover {
+  color: #e53132;
+}
+
+.nav-dropdown {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: visibility 0s, opacity 0.3s ease;
+  list-style-type: none;
+  text-align: left;
+  z-index: 10;
+}
+
+.nav-item:hover .nav-dropdown,
+.nav-dropdown:hover {
+  visibility: visible;
+  opacity: 1;
+}
+
+.nav-item:not(:hover) .nav-dropdown {
+  transition-delay: 0.2s;
+}
+
+.nav-dropdown-item {
+  padding: 8px 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-dropdown-item a {
+  text-decoration: none;
+  color: black;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.nav-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.nav-dropdown-item:hover a {
+  color: #e53132;
+}
+
+.nav-item a.active-link {
+  color: #e53132;
+}
+
+.menu-toggle {
+  display: none; /* Hide by default */
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: end;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 101; /* Ensure it’s on top of other content */
+  right: 0;
+}
+
+.menu-toggle span {
+  width: 30px;
+  height: 3px;
+  background-color: black;
+  transition: 0.3s;
+}
+
+/* Adjust the language switcher to align next to the Contact link */
+.language-switcher {
+display: flex;
+align-items: center;
+margin-left: 1rem; /* Space it from the Contact link */
+cursor: pointer;
+}
+
+/* Style for language option (icon) */
+.language-option img {
+width: 30px; /* Set the size of the flag icon */
+height: auto;
+border-radius: 50%;
+object-fit: cover;
+transition: transform 0.3s ease;
+}
+
+/* Hover effect for the icon */
+.language-option img:hover {
+transform: scale(1.1); /* Slightly enlarge the icon on hover */
+}

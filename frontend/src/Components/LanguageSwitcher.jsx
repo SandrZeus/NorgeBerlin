@@ -14,12 +14,12 @@ const LanguageSwitcher = () => {
         <div className="language-switcher">
             <div 
                 className="language-option"
-                onClick={() => handleLanguageChange(currentLanguage === 'en' ? 'de' : 'en')}
-                title={currentLanguage === 'en' ? 'Switch to German' : 'Switch to English'}
+                onClick={() => handleLanguageChange(currentLanguage === 'de' ? 'en' : 'de')}
+                title={currentLanguage === 'de' ? 'Switch to English' : 'Switch to German'}
             >
                 <img
-                    src={currentLanguage === 'en' ? enFlag : deFlag} 
-                    alt={currentLanguage === 'en' ? 'English' : 'German'} 
+                    src={currentLanguage === 'de' ? deFlag : enFlag} 
+                    alt={currentLanguage === 'de' ? 'English' : 'German'} 
                 />
             </div>
         </div>
