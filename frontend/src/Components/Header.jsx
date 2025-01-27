@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -10,11 +10,12 @@ const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [menuActive, setMenuActive] = useState(false);
+  const [isShrunk, setIsShrunk] = useState(false);
 
   const dropdownPaths = [
     '/informationen-fuer-gasteltern',
     '/informationen-fuer-gastschueler',
-    '/berlintour',
+    '/berlin-tour',
   ];
 
   const isDropdownActive = dropdownPaths.includes(location.pathname);
@@ -27,8 +28,23 @@ const Header = () => {
     setMenuActive(false);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsShrunk(true);
+      } else {
+        setIsShrunk(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <header>
+    <header className={isShrunk ? "shrink" : ""}>
       <div className="logo-container">
         <NavLink to="/">
           <img src={logo} alt="logo" className="nav-logo" />
@@ -53,7 +69,7 @@ const Header = () => {
           </li>
           <li className="nav-item">
             <NavLink className={({ isActive }) => isDropdownActive ? "active-link" : "" } onClick={closeMenu}>
-            {t("Informationen")}⮟
+              {t("Informationen")}⮟
             </NavLink>
             <ul className="nav-dropdown">
               <li className="nav-dropdown-item">
