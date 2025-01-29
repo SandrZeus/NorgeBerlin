@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import "../Styles/Header.css";
@@ -9,9 +9,9 @@ import logo from "../assets/logo_long.png";
 const Header = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
   const [menuActive, setMenuActive] = useState(false);
   const [isShrunk, setIsShrunk] = useState(false);
-
   const dropdownPaths = [
     '/informationen-fuer-gasteltern',
     '/informationen-fuer-gastschueler',
@@ -26,6 +26,15 @@ const Header = () => {
 
   const closeMenu = () => {
     setMenuActive(false);
+  };
+
+  const handleNavClick = (path) => {
+    if (location.pathname === path) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate(path);
+    }
+    closeMenu();
   };
 
   useEffect(() => {
@@ -47,23 +56,23 @@ const Header = () => {
     <header className={isShrunk ? "shrink" : ""}>
       <div className="logo-container">
         <NavLink to="/">
-          <img src={logo} alt="logo" className="nav-logo" />
+          <img src={logo} alt="logo" className="nav-logo" onClick={() => handleNavClick("/")}/>
         </NavLink>
       </div>
       <nav className={`nav-container ${menuActive ? "active" : ""}`}>
         <ul className="nav-list">
           <li className="nav-item">
-            <NavLink to="/" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/")}>
               Home
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/aktuelles" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/aktuelles" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/aktuelles")}>
               {t("Aktuelles")}
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/events" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/events" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/events")}>
               Events
             </NavLink>
           </li>
@@ -76,7 +85,7 @@ const Header = () => {
                 <NavLink
                   to="/informationen-fuer-gasteltern"
                   className={({ isActive }) => (isActive ? "active-link" : "")}
-                  onClick={closeMenu} // Close menu when clicked
+                  onClick={() => handleNavClick("/informationen-fuer-gasteltern")}
                 >
                   {t("informationen-fuer-gasteltern")}
                 </NavLink>
@@ -85,7 +94,7 @@ const Header = () => {
                 <NavLink
                   to="/informationen-fuer-gastschueler"
                   className={({ isActive }) => (isActive ? "active-link" : "")}
-                  onClick={closeMenu} // Close menu when clicked
+                  onClick={() => handleNavClick("/informationen-fuer-gastschueler")}
                 >
                   {t("informationen-fuer-gastschueler")}
                 </NavLink>
@@ -94,7 +103,7 @@ const Header = () => {
                 <NavLink
                   to="/berlintour"
                   className={({ isActive }) => (isActive ? "active-link" : "")}
-                  onClick={closeMenu} // Close menu when clicked
+                  onClick={() => handleNavClick("/berlintour")}
                 >
                   Berlin Tour
                 </NavLink>
@@ -102,17 +111,17 @@ const Header = () => {
             </ul>
           </li>
           <li className="nav-item">
-            <NavLink to="/partnerschulen" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/partnerschulen" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/partnerschulen")}>
               {t("partnerschulen")}
             </NavLink>
             </li>
             <li className="nav-item">
-            <NavLink to="/organisation" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/organisation" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/organisation")}>
               Organisation
             </NavLink>
             </li>
             <li className="nav-item">
-            <NavLink to="/kontakt" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={closeMenu}>
+            <NavLink to="/kontakt" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/kontakt")}>
             {t("kontakt")}
             </NavLink>
             </li>

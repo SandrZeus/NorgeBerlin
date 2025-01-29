@@ -1,11 +1,9 @@
-/* Reset some default browser styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Set a default font for the entire document */
 body {
     font-family: 'Open Sans';
     line-height: 1.6;

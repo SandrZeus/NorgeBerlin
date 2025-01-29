@@ -26,8 +26,8 @@ header.shrink {
 }
 
 header.shrink .nav-logo {
-  width: 111px; /* Adjust width for smaller logo */
-  height: 55px; /* Adjust height for smaller logo */
+  width: 111px;
+  height: 55px;
 }
 
 .nav-container {
@@ -115,7 +115,7 @@ header.shrink .nav-logo {
 }
 
 .menu-toggle {
-  display: none; /* Hide by default */
+  display: none;
   flex-direction: column;
   justify-content: space-around;
   align-items: end;
@@ -124,7 +124,7 @@ header.shrink .nav-logo {
   background: transparent;
   border: none;
   cursor: pointer;
-  z-index: 101; /* Ensure it’s on top of other content */
+  z-index: 101;
   right: 0;
 }
 
@@ -135,24 +135,39 @@ header.shrink .nav-logo {
   transition: 0.3s;
 }
 
-/* Adjust the language switcher to align next to the Contact link */
 .language-switcher {
 display: flex;
 align-items: center;
-margin-left: 1rem; /* Space it from the Contact link */
+margin-left: 20px;
 cursor: pointer;
 }
 
-/* Style for language option (icon) */
 .language-option img {
-width: 30px; /* Set the size of the flag icon */
+width: 25px;
 height: auto;
 border-radius: 50%;
 object-fit: cover;
 transition: transform 0.3s ease;
 }
 
-/* Hover effect for the icon */
 .language-option img:hover {
-transform: scale(1.1); /* Slightly enlarge the icon on hover */
+transform: scale(1.1);
+}
+
+@media (max-width: 1200px) {
+  .logo-container {
+    display: block;
+    margin-left: 5%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .nav-item {
+    position: relative;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
 }
