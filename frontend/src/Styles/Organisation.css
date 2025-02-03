@@ -1,0 +1,55 @@
+.background-organisation {
+    height: 850px;
+    width: 100%;
+    object-fit: cover;
+    padding-bottom: 50px;
+}
+
+.organisation-block {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-direction:row;
+    padding-bottom: 20px;
+}
+
+.organisation-block-texts {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.organisation-image-container {
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.organisation-image {
+    width: 100%;
+    height: auto;
+    max-width: 370px;
+}
+
+.button {
+    background-color: white;
+    color: gray;
+    padding: 10px 20px;
+    border: 2px solid gray; /* Add border */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s; /* Add transition for smooth hover effect */
+}
+
+.button:hover {
+    background-color: rgba(233, 233, 233, 0.493);
+}

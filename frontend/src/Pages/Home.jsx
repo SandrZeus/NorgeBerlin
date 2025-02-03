@@ -44,14 +44,14 @@ const Home = () => {
                 <br />
                 <br />
                 <br />
-                <h2 style={{display: 'flex', fontFamily: 'Playfair Display', fontWeight: 300}}>Torunn Thomassen</h2>
+                <h2>Torunn Thomassen</h2>
                 <br />
                 <i  style={{ color: 'gray'}}>{t("HomeText4")}</i>
                 <br />
                 <br />
                 <div className='home-block'>
                     <div className='home-block-texts'>
-                        <h2 style={{display: 'flex', fontWeight: 500, fontStyle: 'italic', color: 'balck'}}>"{t("HomeQuote")}"</h2>
+                        <h2 style={{fontWeight: 500, fontStyle: 'italic', color: 'balck'}}>"{t("HomeQuote")}"</h2>
                         <p style={{ color: 'gray'}}>{t("HomeText5")}</p>
                         <p style={{ color: 'gray'}}>{t("HomeText6")}</p>
                         <p style={{ color: 'gray'}}>{t("HomeText7")}</p>
@@ -64,21 +64,21 @@ const Home = () => {
                 <br />
                 <br />
                 <br />
-                <h2 style={{display: 'flex', fontFamily: 'Playfair Display', fontWeight: 300}}>{t("HomeTitle3")}</h2>
+                <h2>{t("HomeTitle3")}</h2>
                 <br />
                 <hr style={{ border: '1px solid rgba(234, 236, 238, 0.55)' }} />
                 <br />
-                <p>{t("HomeText9")}: <a href="http://www.norwegen.no/" style={{color: 'red', textDecoration: 'none'}}>http://www.norwegen.no/</a></p>
+                <p>{t("HomeText9")}: <a href="http://www.norwegen.no/" style={{color: '#e53132', textDecoration: 'none'}}>norwegen.no</a></p>
                 <br />
-                <p>Kongshavn Videregående Skole in Oslo: <a href="https://kongshavn.vgs.no/" style={{color: 'red', textDecoration: 'none'}}>https://kongshavn.vgs.no/</a></p>
+                <p>Kongshavn Videregående Skole in Oslo: <a href="https://kongshavn.vgs.no/" style={{color: '#e53132', textDecoration: 'none'}}>kongshavn.vgs.no</a></p>
                 <br />
-                <p>Paul-Natorp-Gymnasium: <a href="http://www.natorp.de/schulprofil/oslo/projekt.html" style={{color: 'red', textDecoration: 'none'}}>http://www.natorp.de/schulprofil/oslo/projekt.html</a></p>
+                <p>Paul-Natorp-Gymnasium: <a href="http://www.natorp.de/schulprofil/oslo/projekt.html" style={{color: '#e53132', textDecoration: 'none'}}>natorp.de/schulprofil/oslo/projekt.html</a></p>
                 <br />
-                <p>Mendelssohn-Bartholdy-Gymnasium: <a href="http://www.mendelssohn-bartholdy-gymnasium.de/" style={{color: 'red', textDecoration: 'none'}}>http://www.mendelssohn-bartholdy-gymnasium.de/</a></p>
+                <p>Mendelssohn-Bartholdy-Gymnasium: <a href="http://www.mendelssohn-bartholdy-gymnasium.de/" style={{color: '#e53132', textDecoration: 'none'}}>mendelssohn-bartholdy-gymnasium.de</a></p>
                 <br />
-                <p>{t("HomeText10")}: <a href="http://www.clioberlin.de" style={{color: 'red', textDecoration: 'none'}}>http://www.clioberlin.de</a></p>
+                <p>{t("HomeText10")}: <a href="http://www.clioberlin.de" style={{color: '#e53132', textDecoration: 'none'}}>clioberlin.de</a></p>
                 <br />
-                <p>{t("HomeText11")}: <a href="https://www.findQ.de" style={{color: 'red', textDecoration: 'none'}}>https://www.findQ.de</a></p>
+                <p>{t("HomeText11")}: <a href="https://www.findQ.de" style={{color: '#e53132', textDecoration: 'none'}}>findQ.de</a></p>
             </div>
             <br />
             <br />
