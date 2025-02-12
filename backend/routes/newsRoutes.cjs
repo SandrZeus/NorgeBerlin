@@ -1,35 +1,55 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const pool = require("../db.cjs");
 const router = express.Router();
-const pool = require('../db.cjs');
+const fs = require("fs");
 
-// Create news article
-router.post("/", async (req, res) => {
+// Configure Multer storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "uploads/");
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
+    },
+});
+
+const upload = multer({ storage });
+
+// Create news with files (images & attachments)
+router.post("/", upload.array("files", 10), async (req, res) => {
     const { title_en, content_en, title_de, content_de } = req.body;
-    const pool = req.pool;
+    const connection = await pool.getConnection();
 
     try {
-        const [result] = await pool.execute(`
-            INSERT INTO news (title_en, content_en, title_de, content_de, created_at, updated_at)
-            VALUES (?, ?, ?, ?, NOW(), NOW())
-        `, [title_en, content_en, title_de, content_de]);
+        await connection.beginTransaction();
 
-        res.status(201).json({
-            message: "News post created successfully",
-            newsId: result.insertId,
-        });
+        const fileUrls = req.files.map(file => `/uploads/${file.filename}`).join(",");
+        const fileTypes = req.files.map(file => file.mimetype.startsWith("image") ? "image" : "attachment").join(",");
+        const positions = req.files.map((_, index) => index + 1).join(",");
+
+        const [newsResult] = await connection.execute(
+            `INSERT INTO news (title_en, content_en, title_de, content_de, file_urls, file_types, positions, created_at, updated_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+            [title_en, content_en, title_de, content_de, fileUrls, fileTypes, positions]
+        );
+
+        await connection.commit();
+        res.status(201).json({ message: "News created successfully", newsId: newsResult.insertId });
     } catch (error) {
-        console.error("Database Error:", error);
-        res.status(500).json({ error: "Database error", details: error.message });
+        await connection.rollback();
+        console.error("Error creating news:", error);
+        res.status(500).json({ error: "Failed to create news" });
+    } finally {
+        connection.release();
     }
 });
 
-
-//Get all news articles
+// Get all news articles
 router.get("/", async (req, res) => {
-    const pool = req.pool;
-
     try {
-        const [news] = await pool.execute("SELECT id, title_en, content_en, title_de, content_de, created_at, updated_at FROM news");
+        const [news] = await pool.execute("SELECT * FROM news");
         res.status(200).json(news);
     } catch (error) {
         console.error("Database Error:", error);
@@ -40,21 +60,23 @@ router.get("/", async (req, res) => {
 // Delete news article
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
-    const pool = req.pool;
-
     try {
-        // First, delete related images and attachments
-        await pool.execute("DELETE FROM news_images WHERE news_id = ?", [id]);
-        await pool.execute("DELETE FROM news_attachments WHERE news_id = ?", [id]);
-
-        // Then, delete the news post itself
-        const [result] = await pool.execute("DELETE FROM news WHERE id = ?", [id]);
-
-        if (result.affectedRows === 0) {
+        const [news] = await pool.execute("SELECT file_urls FROM news WHERE id = ?", [id]);
+        if (news.length === 0) {
             return res.status(404).json({ error: "News post not found" });
         }
+        
+        if (news[0].file_urls) {
+            const filePaths = news[0].file_urls.split(",").map(file => path.join(__dirname, "..", file));
+            filePaths.forEach(filePath => {
+                if (fs.existsSync(filePath)) {
+                    fs.unlinkSync(filePath);
+                }
+            });
+        }
 
-        res.json({ message: "News post deleted successfully" });
+        await pool.execute("DELETE FROM news WHERE id = ?", [id]);
+        res.json({ message: "News post and files deleted successfully" });
     } catch (error) {
         console.error("Database Error:", error);
         res.status(500).json({ error: "Database error", details: error.message });
@@ -62,28 +84,21 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Edit news article
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;  // Getting the post ID from the URL
+router.put("/:id", async (req, res) => {
+    const { id } = req.params;
     const { title_en, content_en, title_de, content_de } = req.body;
 
     try {
-        // First, update the post
         await pool.query(
-            'UPDATE news SET title_en = ?, content_en = ?, title_de = ?, content_de = ?, updated_at = NOW() WHERE id = ?',
+            "UPDATE news SET title_en = ?, content_en = ?, title_de = ?, content_de = ?, updated_at = NOW() WHERE id = ?",
             [title_en, content_en, title_de, content_de, id]
         );
 
-        // Then, fetch the updated post
-        const [updatedPost] = await pool.query(
-            'SELECT * FROM news WHERE id = ?',
-            [id]
-        );
-
-        // Send the updated post as the response
+        const [updatedPost] = await pool.query("SELECT * FROM news WHERE id = ?", [id]);
         res.json(updatedPost);
     } catch (error) {
-        console.error('Error updating post:', error);
-        res.status(500).json({ error: 'Failed to update post' });
+        console.error("Error updating post:", error);
+        res.status(500).json({ error: "Failed to update post" });
     }
 });
 

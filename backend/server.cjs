@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 const pool = require('./db.cjs');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -25,7 +26,7 @@ app.use('/api/news', require('./routes/newsRoutes.cjs'));
 app.use('/api/auth', require('./routes/authRoutes.cjs'));
 
 // Serve static files
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Simple endpoints
 app.get('/', (req, res) => {

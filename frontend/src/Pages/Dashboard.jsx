@@ -4,35 +4,20 @@ import { useTranslation } from 'react-i18next';
 import CreateNewsForm from '../Components/CreateNews.jsx';
 
 const Dashboard = ({ token, setToken }) => {
-    const [userData, setUserData] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [editingPost, setEditingPost] = useState(null); // Track the post being edited
+    const [editingPost, setEditingPost] = useState(null);
     const { i18n } = useTranslation();
     const navigate = useNavigate();
 
-    // Fetch user data and posts when the component mounts
     useEffect(() => {
         if (!token) {
             navigate('/login');
         } else {
-            const fetchData = async () => {
-                try {
-                    const userResponse = await fetch('http://localhost:5000/api/news', {
-                        headers: { 'Authorization': `Bearer ${token}` },
-                    });
-                    const news = await userResponse.json();
-                    setPosts(news);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
-
-            fetchData();
+            fetchNews();
         }
     }, [token, navigate]);
 
-    // Function to refresh posts after creation, deletion, or edit
-    const refreshPosts = async () => {
+    const fetchNews = async () => {
         try {
             const response = await fetch('http://localhost:5000/api/news', {
                 headers: { 'Authorization': `Bearer ${token}` },
@@ -40,45 +25,13 @@ const Dashboard = ({ token, setToken }) => {
             const news = await response.json();
             setPosts(news);
         } catch (error) {
-            console.error('Error refreshing posts:', error);
+            console.error('Error fetching news:', error);
         }
     };
 
     const handleLogout = () => {
         setToken(null);
         navigate('/login');
-    };
-
-    // Handle editing a post
-    const handleEdit = (post) => {
-        setEditingPost(post); // Set the post to be edited
-    };
-
-    // Handle submitting the edited post
-    const handleSubmitEdit = async (e) => {
-        e.preventDefault();
-        const { title_en, content_en, title_de, content_de } = editingPost;
-
-        try {
-            const response = await fetch(`http://localhost:5000/api/news/${editingPost.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify({ title_en, content_en, title_de, content_de }),
-            });
-
-            if (response.ok) {
-                alert('Post updated successfully!');
-                refreshPosts(); // Refresh posts after updating
-                setEditingPost(null); // Close the edit form
-            } else {
-                alert('Error updating post');
-            }
-        } catch (error) {
-            console.error('Error updating post:', error);
-        }
     };
 
     const handleDelete = async (id) => {
@@ -94,7 +47,7 @@ const Dashboard = ({ token, setToken }) => {
 
                 if (response.ok) {
                     alert('Post deleted successfully!');
-                    refreshPosts(); // Refresh posts after deletion
+                    fetchNews();
                 } else {
                     alert('Error deleting post');
                 }
@@ -104,22 +57,47 @@ const Dashboard = ({ token, setToken }) => {
         }
     };
 
+    const handleEdit = (post) => {
+        setEditingPost(post);
+    };
+
+    const handleSubmitEdit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`http://localhost:5000/api/news/${editingPost.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    title_en: editingPost.title_en,
+                    content_en: editingPost.content_en,
+                    title_de: editingPost.title_de,
+                    content_de: editingPost.content_de,
+                }),
+            });
+
+            if (response.ok) {
+                alert('Post updated successfully!');
+                setEditingPost(null);
+                fetchNews();
+            } else {
+                alert('Error updating post');
+            }
+        } catch (error) {
+            console.error('Error updating post:', error);
+        }
+    };
+
     return (
         <div className="dashboard-wrapper">
             <h1>Welcome to your Dashboard</h1>
-            
-            {userData ? (
-                <div>
-                    <h2>Hello, {userData.username}</h2>
-                    <button onClick={handleLogout}>Log Out</button>
-                </div>
-            ) : (
-                <p>Loading user data...</p>
-            )}
+            <button onClick={handleLogout}>Log Out</button>
 
-            {/* Newsletter form inside dashboard */}
             <h2>Create a News Post</h2>
-            <CreateNewsForm refreshPosts={refreshPosts} />
+            <CreateNewsForm refreshPosts={fetchNews} />
 
             <h2>Your Blog Posts</h2>
             <ul>
@@ -128,19 +106,33 @@ const Dashboard = ({ token, setToken }) => {
                 ) : (
                     posts.map(post => (
                         <li key={post.id}>
-                            <h3>{i18n.language === 'de' ? post.title_de : post.title_en}</h3>
-                            <p>{i18n.language === 'de' ? post.content_de : post.content_en}</p>
+                            <h3>{post.title_en}</h3>
+                            <p>{post.content_en}</p>
 
-                            {/* Edit Button */}
+                            {/* Display uploaded files */}
+                            {post.file_urls && post.file_types && post.positions && (
+                                post.file_urls.split(',').map((url, index) => {
+                                    const type = post.file_types.split(',')[index].trim();
+                                    return type === 'image' ? (
+                                        <img key={index} src={`http://localhost:5000${url}`} alt="News" width="200px" />
+                                    ) : (
+                                        <p key={index}>
+                                            <a href={`http://localhost:5000${url}`} target="_blank" rel="noopener noreferrer">
+                                                Download Attachment {index + 1}
+                                            </a>
+                                        </p>
+                                    );
+                                })
+                            )}
+
+                            <br />
                             <button onClick={() => handleEdit(post)}>Edit</button>
-                            {/* Delete Button */}
                             <button onClick={() => handleDelete(post.id)}>Delete</button>
                         </li>
                     ))
                 )}
             </ul>
 
-            {/* Edit Form */}
             {editingPost && (
                 <div>
                     <h2>Edit Post</h2>
