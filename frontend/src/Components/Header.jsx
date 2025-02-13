@@ -72,11 +72,6 @@ const Header = () => {
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/events" className={({ isActive }) => (isActive ? "active-link" : "")} onClick={() => handleNavClick("/events")}>
-              Events
-            </NavLink>
-          </li>
-          <li className="nav-item">
             <NavLink className={({ isActive }) => isDropdownActive ? "active-link" : "" } onClick={closeMenu}>
               {t("Informationen")}⮟
             </NavLink>

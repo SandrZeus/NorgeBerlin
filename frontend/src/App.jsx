@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Header from './Components/Header';
 import Home from './Pages/Home';
 import Aktuelles from './Pages/Aktuelles';
-import Events from './Pages/Events';
+import AktuellesDetail from './Components/AktuellesDetail';
 import Gasteltern from './Pages/Gasteltern';
 import Gastschueler from './Pages/Gastschueler';
 import Berlintour from './Pages/Berlintour';
@@ -37,7 +37,7 @@ function App() {
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/" element={<Home />} />
         <Route path="/aktuelles" element={<Aktuelles />} />
-        <Route path="/events" element={<Events />} />
+        <Route path="/aktuelles/:id" element={<AktuellesDetail />} />
         <Route path="/informationen-fuer-gasteltern" element={<Gasteltern />} />
         <Route path="/informationen-fuer-gastschueler" element={<Gastschueler />} />
         <Route path="/berlintour" element={<Berlintour />} />

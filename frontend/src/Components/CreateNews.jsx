@@ -1,54 +1,74 @@
 import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReactQuill from 'react-quill';  // Import Quill
+import 'react-quill/dist/quill.snow.css';  // Import Quill styles
 
-const CreateNewsForm = () => {
+const CreateNewsForm = ({ refreshPosts }) => {
     const { t } = useTranslation();
-    const [title_en, setTitleEn] = useState('');
-    const [content_en, setContentEn] = useState('');
-    const [title_de, setTitleDe] = useState('');
-    const [content_de, setContentDe] = useState('');
-    const [files, setFiles] = useState([]);
+    
+    const [formData, setFormData] = useState({
+        title_en: '',
+        content_en: '',
+        title_de: '',
+        content_de: '',
+        createdAt: '',
+        files: []
+    });
+
+    const [loading, setLoading] = useState(false);
     const fileInputRef = useRef(null);
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
     const handleFileChange = (e) => {
-        setFiles(Array.from(e.target.files));
+        setFormData((prev) => ({ ...prev, files: Array.from(e.target.files) }));
+    };
+
+    const handleQuillChange = (value, field) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formData = new FormData();
+        
+        if (!formData.title_en || !formData.content_en || !formData.title_de || !formData.content_de) {
+            alert(t('pleaseFillAllFields'));
+            return;
+        }
 
-        formData.append('title_en', title_en);
-        formData.append('content_en', content_en);
-        formData.append('title_de', title_de);
-        formData.append('content_de', content_de);
+        setLoading(true);
+        const submissionData = new FormData();
 
-        files.forEach((file) => {
-            formData.append('files', file);
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key === 'files') {
+                value.forEach((file) => submissionData.append('files', file));
+            } else {
+                submissionData.append(key, value);
+            }
         });
 
         try {
             const response = await fetch('http://localhost:5000/api/news', {
                 method: 'POST',
-                body: formData,
+                body: submissionData,
             });
 
             if (response.ok) {
-                alert('News post created successfully!');
-                setTitleEn('');
-                setContentEn('');
-                setTitleDe('');
-                setContentDe('');
-                setFiles([]);
-
-                if (fileInputRef.current) {
-                    fileInputRef.current.value = '';
-                }
+                alert(t('newsCreatedSuccess'));
+                setFormData({ title_en: '', content_en: '', title_de: '', content_de: '', createdAt: '', files: [] });
+                if (fileInputRef.current) fileInputRef.current.value = '';
+                refreshPosts();
             } else {
-                alert('Error creating news post');
+                alert(t('errorCreatingNews'));
             }
         } catch (error) {
-            console.error('Error creating news:', error);
+            console.error('Error:', error);
+            alert(t('networkError'));
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -57,21 +77,43 @@ const CreateNewsForm = () => {
             <h1>{t('createNews')}</h1>
             <form onSubmit={handleSubmit}>
                 <label>{t('title')} (English)</label>
-                <input type="text" value={title_en} onChange={(e) => setTitleEn(e.target.value)} required />
+                <input type="text" name="title_en" value={formData.title_en} onChange={handleChange} placeholder={t('enterTitle')} required />
 
                 <label>{t('content')} (English)</label>
-                <textarea value={content_en} onChange={(e) => setContentEn(e.target.value)} required />
+                <ReactQuill
+                    name="content_en"
+                    value={formData.content_en}
+                    onChange={(value) => handleQuillChange(value, 'content_en')}
+                    placeholder={t('enterContent')}
+                    required
+                />
 
                 <label>{t('title')} (German)</label>
-                <input type="text" value={title_de} onChange={(e) => setTitleDe(e.target.value)} required />
+                <input type="text" name="title_de" value={formData.title_de} onChange={handleChange} placeholder={t('enterTitle')} required />
 
                 <label>{t('content')} (German)</label>
-                <textarea value={content_de} onChange={(e) => setContentDe(e.target.value)} required />
+                <ReactQuill
+                    name="content_de"
+                    value={formData.content_de}
+                    onChange={(value) => handleQuillChange(value, 'content_de')}
+                    placeholder={t('enterContent')}
+                    required
+                />
 
                 <label>{t('uploadFiles')}</label>
                 <input ref={fileInputRef} type="file" multiple onChange={handleFileChange} />
+                {formData.files.length > 0 && (
+                    <ul>
+                        {formData.files.map((file, index) => (
+                            <li key={index}>{file.name}</li>
+                        ))}
+                    </ul>
+                )}
 
-                <button type="submit">{t('create')}</button>
+                <label>{t('createdAt')}</label>
+                <input type="datetime-local" name="createdAt" value={formData.createdAt} onChange={handleChange} />
+
+                <button type="submit" disabled={loading}>{loading ? t('creating') : t('create')}</button>
             </form>
         </div>
     );

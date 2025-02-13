@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import CreateNewsForm from '../Components/CreateNews.jsx';
+import DOMPurify from 'dompurify'; // Import DOMPurify for sanitization
 
 const Dashboard = ({ token, setToken }) => {
     const [posts, setPosts] = useState([]);
@@ -107,8 +108,13 @@ const Dashboard = ({ token, setToken }) => {
                     posts.map(post => (
                         <li key={post.id}>
                             <h3>{post.title_en}</h3>
-                            <p>{post.content_en}</p>
-
+                            {/* Render the content with HTML formatting */}
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(post.content_en),
+                                }}
+                            />
+                            
                             {/* Display uploaded files */}
                             {post.file_urls && post.file_types && post.positions && (
                                 post.file_urls.split(',').map((url, index) => {
