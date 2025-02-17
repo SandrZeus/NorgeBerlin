@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import DOMPurify from 'dompurify'; // Import DOMPurify for sanitizing
+import { useTranslation } from 'react-i18next';
 import "../Styles/index.css";
+import "../Styles/Aktuelles.css";
 
 const Aktuelles = () => {
     const [news, setNews] = useState([]);
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         fetch('http://localhost:5000/api/news')
@@ -13,49 +15,44 @@ const Aktuelles = () => {
             .catch(error => console.error('Error fetching news:', error));
     }, []);
 
+    // Function to remove all HTML tags
+    const stripHtml = (html) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        return doc.body.textContent || "";
+    };
+
     return (
-        <div>
-            <h1>Latest News</h1>
-            <ul>
+        <div className="page">
+            <div className="header">
+                <h1>{t('latestNews')}</h1>
+            </div>
+
+            <div className="news-list">
                 {news.map(post => (
-                    <li key={post.id} style={styles.preview}>
-                        {/* First image preview */}
+                    <Link to={`/aktuelles/${post.id}`} key={post.id} className="news-item">
                         {post.file_urls && (
                             <img 
                                 src={`http://localhost:5000${post.file_urls.split(',')[0]}`} 
                                 alt="News Preview" 
-                                width="150px" 
+                                className="news-image"
                             />
                         )}
-
-                        {/* Post title */}
-                        <h2>{post.title_en}</h2>
-                        
-                        {/* Render first sentence preview */}
-                        <p>{post.content_en.split('.')[0]}...</p>
-                        
-                        {/* Render the full content with HTML formatting */}
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(post.content_en), // Sanitize the content
-                            }}
-                        />
-                        
-                        {/* Link to full news */}
-                        <Link to={`/aktuelles/${post.id}`}>Read More</Link>
-                    </li>
+                        <div className="news-content">
+                            <h2 className="news-title">
+                                {i18n.language === 'en' ? post.title_en : post.title_de}
+                            </h2>
+                            <p className="news-text">
+                                {i18n.language === 'en' 
+                                    ? `${stripHtml(post.content_en).split('.')[0]}...` 
+                                    : `${stripHtml(post.content_de).split('.')[0]}...`
+                                }
+                            </p>
+                        </div>
+                    </Link>
                 ))}
-            </ul>
+            </div>
         </div>
     );
-};
-
-const styles = {
-    preview: {
-        borderBottom: '1px solid #ddd',
-        padding: '10px',
-        marginBottom: '10px'
-    }
 };
 
 export default Aktuelles;

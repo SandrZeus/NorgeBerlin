@@ -92,35 +92,43 @@ const Dashboard = ({ token, setToken }) => {
         }
     };
 
+    // Create a summary from the content to show in the list
+    const getContentSummary = (content) => {
+        const sanitizedContent = DOMPurify.sanitize(content);
+        const textContent = sanitizedContent.replace(/<[^>]+>/g, ''); // Remove HTML tags
+        return textContent.length > 150 ? textContent.slice(0, 150) + '...' : textContent;
+    };
+
     return (
         <div className="dashboard-wrapper">
             <h1>Welcome to your Dashboard</h1>
             <button onClick={handleLogout}>Log Out</button>
 
-            <h2>Create a News Post</h2>
             <CreateNewsForm refreshPosts={fetchNews} />
 
             <h2>Your Blog Posts</h2>
-            <ul>
+            <div className="posts-grid">
                 {posts.length === 0 ? (
                     <p>No posts available.</p>
                 ) : (
                     posts.map(post => (
-                        <li key={post.id}>
+                        <div className="post-card" key={post.id}>
                             <h3>{post.title_en}</h3>
-                            {/* Render the content with HTML formatting */}
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(post.content_en),
-                                }}
-                            />
+                            {/* Display a content summary */}
+                            <p>{getContentSummary(post.content_en)}</p>
                             
-                            {/* Display uploaded files */}
+                            {/* Display images as thumbnails */}
                             {post.file_urls && post.file_types && post.positions && (
                                 post.file_urls.split(',').map((url, index) => {
                                     const type = post.file_types.split(',')[index].trim();
                                     return type === 'image' ? (
-                                        <img key={index} src={`http://localhost:5000${url}`} alt="News" width="200px" />
+                                        <img
+                                            key={index}
+                                            src={`http://localhost:5000${url}`}
+                                            alt="News"
+                                            width="100px" // Thumbnail size
+                                            style={{ marginRight: '10px' }}
+                                        />
                                     ) : (
                                         <p key={index}>
                                             <a href={`http://localhost:5000${url}`} target="_blank" rel="noopener noreferrer">
@@ -131,13 +139,14 @@ const Dashboard = ({ token, setToken }) => {
                                 })
                             )}
 
-                            <br />
-                            <button onClick={() => handleEdit(post)}>Edit</button>
-                            <button onClick={() => handleDelete(post.id)}>Delete</button>
-                        </li>
+                            <div className="post-actions">
+                                <button onClick={() => handleEdit(post)}>Edit</button>
+                                <button onClick={() => handleDelete(post.id)}>Delete</button>
+                            </div>
+                        </div>
                     ))
                 )}
-            </ul>
+            </div>
 
             {editingPost && (
                 <div>

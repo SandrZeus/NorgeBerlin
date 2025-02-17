@@ -5,17 +5,18 @@ const pool = require("../db.cjs");
 const router = express.Router();
 const fs = require("fs");
 
-// Configure Multer storage
+// Set up multer to handle file uploads
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "uploads/");
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');  // Ensure 'uploads' directory exists
     },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname));
-    },
+    filename: function (req, file, cb) {
+        // Ensure a unique filename using Date.now()
+        cb(null, Date.now() + path.extname(file.originalname)); 
+    }
 });
 
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Create news with files (images & attachments)
 router.post("/", upload.array("files", 10), async (req, res) => {
@@ -25,9 +26,21 @@ router.post("/", upload.array("files", 10), async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        const fileUrls = req.files.map(file => `/uploads/${file.filename}`).join(",");
-        const fileTypes = req.files.map(file => file.mimetype.startsWith("image") ? "image" : "attachment").join(",");
-        const positions = req.files.map((_, index) => index + 1).join(",");
+        // Log file details for debugging
+        console.log('Uploaded Files:', req.files);
+
+        // Construct file URLs for each uploaded file
+        const fileUrls = req.files.map(file => `/uploads/${file.filename}`);
+        const fileTypes = req.files.map(file => file.mimetype.startsWith("image") ? "image" : "attachment");
+        const positions = req.files.map((_, index) => index + 1);
+
+        // Log file URLs to ensure they're unique
+        console.log('File URLs:', fileUrls);
+
+        // Insert the file URLs into the database as comma-separated values
+        const fileUrlsString = fileUrls.join(",");
+        const fileTypesString = fileTypes.join(",");
+        const positionsString = positions.join(",");
 
         // Use provided created_at date or default to NOW()
         const customCreatedAt = created_at ? new Date(created_at) : new Date();
@@ -35,7 +48,7 @@ router.post("/", upload.array("files", 10), async (req, res) => {
         const [newsResult] = await connection.execute(
             `INSERT INTO news (title_en, content_en, title_de, content_de, file_urls, file_types, positions, created_at, updated_at) 
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
-            [title_en, content_en, title_de, content_de, fileUrls, fileTypes, positions, customCreatedAt]
+            [title_en, content_en, title_de, content_de, fileUrlsString, fileTypesString, positionsString, customCreatedAt]
         );
 
         await connection.commit();
@@ -48,7 +61,6 @@ router.post("/", upload.array("files", 10), async (req, res) => {
         connection.release();
     }
 });
-
 
 // Get all news articles
 router.get("/", async (req, res) => {
