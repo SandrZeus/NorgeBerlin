@@ -33,11 +33,14 @@ function App() {
       <br />
       <br />
       <br />
+      <br />
+      <br />
+      <br />
       <Routes>
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/" element={<Home />} />
         <Route path="/aktuelles" element={<Aktuelles />} />
-        <Route path="/aktuelles/:id" element={<AktuellesDetail />} />
+        <Route path="/aktuelles/:slug" element={<AktuellesDetail />} />
         <Route path="/informationen-fuer-gasteltern" element={<Gasteltern />} />
         <Route path="/informationen-fuer-gastschueler" element={<Gastschueler />} />
         <Route path="/berlintour" element={<Berlintour />} />

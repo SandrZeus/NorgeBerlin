@@ -11,9 +11,13 @@ const Aktuelles = () => {
     useEffect(() => {
         fetch('http://localhost:5000/api/news')
             .then(response => response.json())
-            .then(data => setNews(data))
+            .then(data => {
+                console.log(data); // Log the fetched news
+                setNews(data);
+            })
             .catch(error => console.error('Error fetching news:', error));
     }, []);
+    
 
     // Function to remove all HTML tags
     const stripHtml = (html) => {
@@ -29,7 +33,7 @@ const Aktuelles = () => {
 
             <div className="news-list">
                 {news.map(post => (
-                    <Link to={`/aktuelles/${post.id}`} key={post.id} className="news-item">
+                    <Link to={`/aktuelles/${post.slug}`} key={post.id} className="news-item">
                         {post.file_urls && (
                             <img 
                                 src={`http://localhost:5000${post.file_urls.split(',')[0]}`} 

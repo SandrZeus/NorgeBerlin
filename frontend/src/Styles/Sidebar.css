@@ -1,0 +1,43 @@
+.news-content-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 20px;
+}
+
+.news-content {
+  width: 60%;
+  padding-right: 20px;
+}
+
+.sidebar {
+  width: 30%;
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.follow-us,
+.latest-news,
+.advertisement {
+  margin-bottom: 20px;
+}
+
+.follow-us a,
+.latest-news a {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.follow-us a svg {
+  margin-right: 8px;
+}
+
+.advertisement img {
+  width: 100%;
+  border-radius: 10px;
+}

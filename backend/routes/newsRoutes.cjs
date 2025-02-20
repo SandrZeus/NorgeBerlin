@@ -4,6 +4,7 @@ const path = require("path");
 const pool = require("../db.cjs");
 const router = express.Router();
 const fs = require("fs");
+const slugify = require("slugify");
 
 // Set up multer to handle file uploads
 const storage = multer.diskStorage({
@@ -18,26 +19,26 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Create news with files (images & attachments)
+// Create news article
 router.post("/", upload.array("files", 10), async (req, res) => {
-    const { title_en, content_en, title_de, content_de, created_at } = req.body;
+    const { title_en, content_en, title_de, content_de, created_at, show_first_image, gallery_layout } = req.body;
     const connection = await pool.getConnection();
 
     try {
         await connection.beginTransaction();
 
-        // Log file details for debugging
-        console.log('Uploaded Files:', req.files);
+        // Generate a slug from the German title
+        const slug = slugify(title_de, { lower: true, strict: true });
+
+        // Convert show_first_image to a proper boolean (0 or 1)
+        const showFirstImage = show_first_image === "true" ? 1 : 0;
 
         // Construct file URLs for each uploaded file
         const fileUrls = req.files.map(file => `/uploads/${file.filename}`);
         const fileTypes = req.files.map(file => file.mimetype.startsWith("image") ? "image" : "attachment");
         const positions = req.files.map((_, index) => index + 1);
 
-        // Log file URLs to ensure they're unique
-        console.log('File URLs:', fileUrls);
-
-        // Insert the file URLs into the database as comma-separated values
+        // Convert arrays to comma-separated strings
         const fileUrlsString = fileUrls.join(",");
         const fileTypesString = fileTypes.join(",");
         const positionsString = positions.join(",");
@@ -46,13 +47,30 @@ router.post("/", upload.array("files", 10), async (req, res) => {
         const customCreatedAt = created_at ? new Date(created_at) : new Date();
 
         const [newsResult] = await connection.execute(
-            `INSERT INTO news (title_en, content_en, title_de, content_de, file_urls, file_types, positions, created_at, updated_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
-            [title_en, content_en, title_de, content_de, fileUrlsString, fileTypesString, positionsString, customCreatedAt]
+            `INSERT INTO news (title_en, content_en, title_de, content_de, file_urls, file_types, positions, created_at, updated_at, show_first_image, gallery_layout, slug) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ? )`,
+            [
+                title_en,
+                content_en,
+                title_de,
+                content_de,
+                fileUrlsString,
+                fileTypesString,
+                positionsString,
+                customCreatedAt,
+                showFirstImage, 
+                gallery_layout || "grid",
+                slug // Store the generated slug from German title
+            ]
         );
 
         await connection.commit();
-        res.status(201).json({ message: "News created successfully", newsId: newsResult.insertId, createdAt: customCreatedAt });
+        res.status(201).json({ 
+            message: "News created successfully", 
+            newsId: newsResult.insertId, 
+            slug, 
+            createdAt: customCreatedAt 
+        });
     } catch (error) {
         await connection.rollback();
         console.error("Error creating news:", error);
@@ -73,6 +91,30 @@ router.get("/", async (req, res) => {
     }
 });
 
+// Get news article by slug
+router.get('/:slug', async (req, res) => {
+    const slug = req.params.slug;
+    const connection = await pool.getConnection();
+
+    try {
+        const [rows] = await connection.execute(
+            `SELECT * FROM news WHERE slug = ?`, [slug]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'Article not found' });
+        }
+
+        res.json(rows[0]);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    } finally {
+        connection.release();
+    }
+});
+
+// Get news article by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     const connection = await pool.getConnection();

@@ -1,0 +1,126 @@
+.news-featured-image {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
+.news-featured-image img {
+  width: 100%;
+  height: 500px;
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-direction: row;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.title-date {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin-bottom: 10px;
+}
+
+.news-title {
+  font-size: 28px;
+  font-weight: 500;
+  margin: 0;
+  padding-left: 30px;
+}
+
+.news-date {
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 5px;
+  padding-left: 30px;
+  padding-bottom: 30px;
+}
+
+.news-share {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  padding-right: 30px;
+  padding-bottom: 30px;
+}
+
+.news-share a {
+  color: white;
+  font-size: 1rem; /* This is optional, as you are setting size in the JSX */
+  text-decoration: none;
+}
+
+.news-share a:hover {
+  opacity: 0.7;
+}
+
+.news-content {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.news-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.news-gallery img {
+  width: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.news-gallery img:hover {
+  transform: scale(1.1);
+}
+
+/* Default Grid Layout */
+.news-gallery.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+/* Masonry Layout */
+.news-gallery.masonry {
+  column-count: 3;
+  column-gap: 10px;
+}
+
+.news-gallery.masonry img {
+  width: 100%;
+  break-inside: avoid;
+  margin-bottom: 10px;
+}
+
+/* Carousel Layout */
+.news-gallery.carousel {
+  display: flex;
+  overflow-x: scroll;
+  gap: 10px;
+}
+
+.news-gallery.carousel img {
+  flex: 0 0 auto;
+  width: 300px;
+  border-radius: 10px;
+}
