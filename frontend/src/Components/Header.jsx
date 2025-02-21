@@ -97,7 +97,7 @@ const Header = () => {
         {articleTitles.length > 0 && (
           <div className="news-ticker-content">
             <span className="news-item-header">
-              <span className="news-label">Latest News:</span>{" "}
+              <span className="news-label">{t("LatestNews")}</span>{" "}
               <NavLink
                 to={`/aktuelles/${articleTitles[currentTitleIndex].slug}`}
                 className="news-link"
@@ -108,14 +108,14 @@ const Header = () => {
 
             <div className="news-social-icons">
               <a
-                href="https://www.facebook.com"
+                href="https://www.facebook.com/norgeberlin.de"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaFacebookF className="social-icon" />
               </a>
               <a
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/explore/search/keyword/?q=%23norgeberlin"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -148,14 +148,14 @@ const Header = () => {
 
           <div className="news-social-icons desktop-icons">
             <a
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/norgeberlin.de"
               target="_blank"
               rel="noopener noreferrer"
             >
               <FaFacebookF className="social-icon" />
             </a>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/explore/search/keyword/?q=%23norgeberlin"
               target="_blank"
               rel="noopener noreferrer"
             >

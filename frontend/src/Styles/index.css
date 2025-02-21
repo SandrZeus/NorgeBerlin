@@ -26,8 +26,30 @@ h2 {
     height: 135px;
 }
 
+@media screen and (max-width: 1400px) {
+
+}
+
+@media (max-width: 1200px) {
+    .page {
+        padding-left: 15%;
+        padding-right: 15%;
+    }
+}
+
 @media (max-width: 999px) {
     .spacer {
         height: 0;
+    }
+    .page {
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .page {
+        padding-left: 5%;
+        padding-right: 5%;
     }
 }

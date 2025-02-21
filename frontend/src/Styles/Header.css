@@ -168,10 +168,10 @@ header.shrink .nav-logo {
   background-color: #e53132;
   font-style: italic;
   color: white;
-  padding: 1px 4px;
+  padding: 1px 6px;
   border-radius: 3px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   margin-right: 3px;
 }
 

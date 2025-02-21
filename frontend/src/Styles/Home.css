@@ -30,7 +30,7 @@
     color: white;
     font-size: 100px;
     left: 50%;
-    top: 20%;
+    top: 10%;
     transform: translateX(-50%);
     animation: slideDown 1s ease-out;
 }
@@ -42,28 +42,39 @@
     transform: translateX(-50%);
     width: 60%;
     background-color: white;
-    padding: 80px 50px 50px 80px;
+    padding: 80px 50px;
     display: flex;
     justify-content: space-between;
-    height: 600px;
-    flex-direction:row;
+    height: auto; 
+    max-height: 700px; 
+    flex-wrap: nowrap; 
+    overflow: hidden; 
+    gap: 50px;
 }
 
 .home-texts {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-basis: 50%; 
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 320px; 
 }
 
 .home-images {
-    width: auto;
-    height: auto;
+    flex-basis: 45%;
+    flex-grow: 1;
+    flex-shrink: 1;
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
-    flex-direction: column;
-    gap: 8%;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-images img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: cover;
 }
 
 .home-image {
@@ -76,11 +87,18 @@
     padding-bottom: 50px;
 }
 
+.home-image img {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: cover;
+}
+
 .home-block {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    flex-direction:row;
+    flex-direction: row;
 }
 
 .home-block-texts {
@@ -89,4 +107,173 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 20px;
+}
+
+@media screen and (max-width: 1400px) {
+    .home-block {
+        flex-direction: column; 
+        align-items: center;
+        text-align: center; 
+    }
+
+    .home-block-texts {
+        width: 100%;
+    }
+
+    .home-images {
+        margin-top: 20px; 
+    }
+
+    .home-title {
+        font-size: 80px;
+    }
+
+    .white-block {
+        width: 70%;
+        gap: 30px;
+    }
+
+    .home-images img {
+        max-width: 500px;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+    h2 {
+        font-size: 30px; 
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .white-block {
+        width: 80%;
+        flex-wrap: wrap;
+        max-height: none;
+        padding: 60px 40px;
+    }
+
+    .home-title {
+        font-size: 70px;
+    }
+
+    .home-texts,
+    .home-images {
+        flex-basis: 100%;
+        text-align: center;
+    }
+
+    .home-images {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .home-images img {
+        max-width: 400px;
+    }
+
+    h1 {
+        font-size: 36px; 
+    }
+    h2 {
+        font-size: 28px;
+    }
+}
+
+@media screen and (max-width: 999px) {
+    .home-title {
+        font-size: 60px;
+        top: 15%;
+    }
+
+    .white-block {
+        width: 90%;
+        padding: 50px 30px;
+    }
+
+    .home-texts {
+        font-size: 16px;
+    }
+
+    .home-images {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .home-images img {
+        max-width: 200px; 
+        height: auto;
+    }
+
+    h1 {
+        font-size: 32px; 
+    }
+    h2 {
+        font-size: 24px; 
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .home-title {
+        font-size: 50px;
+        top: 10%;
+    }
+
+    .white-block {
+        width: 95%;
+        padding: 40px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .home-texts {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .home-images {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .home-images img {
+        max-width: 150px; 
+        height: auto;
+    }
+
+    h1 {
+        font-size: 28px; 
+    }
+    h2 {
+        font-size: 22px; 
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .home-title {
+        font-size: 40px;
+    }
+
+    .home-texts {
+        font-size: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+    h2 {
+        font-size: 20px; 
+    }
+
+    .home-images {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
 }
