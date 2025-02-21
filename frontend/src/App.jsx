@@ -30,12 +30,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      <div className="spacer" />
       <Routes>
         <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/" element={<Home />} />

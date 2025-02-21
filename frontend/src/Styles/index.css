@@ -21,3 +21,13 @@ h2 {
     font-family: 'Playfair Display';
     font-weight: 300
 }
+
+.spacer {
+    height: 135px;
+}
+
+@media (max-width: 999px) {
+    .spacer {
+        height: 0;
+    }
+}

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import "../Styles/Header.css";
 import logo from "../assets/logo_long.png";
+import { FaFacebookF, FaInstagram } from "react-icons/fa";
 
 const Header = () => {
   const { t, i18n } = useTranslation();
@@ -58,17 +59,17 @@ const Header = () => {
         const data = await response.json();
 
         if (data.length > 0) {
-          const titles = data.map((article) =>
-            i18n.language === "de" ? article.title_de : article.title_en
-          );
+          const articles = data.map((article) => ({
+            title: i18n.language === "de" ? article.title_de : article.title_en,
+            slug: article.slug,
+          }));
 
-          // Fisher-Yates Shuffle Algorithm
-          for (let i = titles.length - 1; i > 0; i--) {
+          for (let i = articles.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [titles[i], titles[j]] = [titles[j], titles[i]];
+            [articles[i], articles[j]] = [articles[j], articles[i]];
           }
 
-          setArticleTitles(titles);
+          setArticleTitles(articles);
         }
       } catch (error) {
         console.error("Failed to fetch article titles:", error);
@@ -76,7 +77,7 @@ const Header = () => {
     };
 
     fetchArticles();
-  }, [i18n.language]); // Refetch titles when the language changes
+  }, [i18n.language]);
 
   useEffect(() => {
     if (articleTitles.length === 0) return;
@@ -92,24 +93,48 @@ const Header = () => {
 
   return (
     <>
-      {/* News Ticker */}
       <div className={`news-ticker ${showTicker ? "" : "hidden"}`}>
         {articleTitles.length > 0 && (
-          <span className="news-item-header">
-            <span className="news-label">Latest News:</span>{" "}
-            <NavLink
-              to={`/aktuelles/${articleTitles[currentTitleIndex].slug}`}
-              className="news-link"
-            >
-              {articleTitles[currentTitleIndex].title}
-            </NavLink>
-          </span>
+          <div className="news-ticker-content">
+            <span className="news-item-header">
+              <span className="news-label">Latest News:</span>{" "}
+              <NavLink
+                to={`/aktuelles/${articleTitles[currentTitleIndex].slug}`}
+                className="news-link"
+              >
+                {articleTitles[currentTitleIndex].title}
+              </NavLink>
+            </span>
+
+            <div className="news-social-icons">
+              <a
+                href="https://www.facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaFacebookF className="social-icon" />
+              </a>
+              <a
+                href="https://www.instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaInstagram className="social-icon" />
+              </a>
+            </div>
+          </div>
         )}
       </div>
 
-      {/* Main Header */}
       <div className={`header-container ${showTicker ? "" : "shrunk"}`}>
         <header className={isShrunk ? "shrink" : ""}>
+          {/* Burger Menu Button */}
+          <button className="menu-toggle" onClick={toggleMenu}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
           <div className="logo-container">
             <NavLink to="/">
               <img
@@ -120,6 +145,25 @@ const Header = () => {
               />
             </NavLink>
           </div>
+
+          <div className="news-social-icons desktop-icons">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaFacebookF className="social-icon" />
+            </a>
+            <a
+              href="https://www.instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaInstagram className="social-icon" />
+            </a>
+          </div>
+
+          {/* Navigation */}
           <nav className={`nav-container ${menuActive ? "active" : ""}`}>
             <ul className="nav-list">
               <li className="nav-item">
