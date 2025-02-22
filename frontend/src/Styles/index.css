@@ -16,6 +16,12 @@ body {
     padding-right: 20%;
 }
 
+h1 {
+    display: 'flex';
+    font-family: 'Playfair Display';
+    font-weight: 500
+}
+
 h2 {
     display: 'flex';
     font-family: 'Playfair Display';

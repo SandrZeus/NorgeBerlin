@@ -1,0 +1,66 @@
+.partner-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap; /* Allows stacking on smaller screens */
+}
+
+.partner-info {
+    padding: 20px;
+    width: 50%; /* Ensures it takes up 50% of the width */
+}
+
+.partner-image-container {
+    display: flex;
+    justify-content: center; /* Center the image container */
+    align-items: center; /* Center vertically */
+    width: 50%; /* Ensures it takes up 50% of the width */
+}
+
+.partner-image {
+    max-width: 100%; /* Ensures the image fits within the container */
+    height: auto;
+}
+
+.partner-image img {
+   width: 100%;
+}
+
+/* Optional: Style for the button */
+.button-Partner {
+    background-color: #e53132; /* Set background color to red */
+    color: white; /* Set text color to white */
+    padding: 10px 20px;
+    border: 2px solid #e53132; /* Update border color to match the background */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s; /* Add transition for smooth hover effect */
+}
+
+.button-Partner:hover {
+    background-color: rgba(233, 81, 50, 0.8); /* Slightly darker red on hover */
+    border-color: rgba(233, 81, 50, 0.8); /* Update border color on hover */
+}
+
+/* Responsive Styles */
+@media (max-width: 767px) {
+    .partner-block {
+        flex-direction: column; /* Stack elements on small screens */
+        align-items: center; /* Center items */
+    }
+
+    .partner-info {
+        width: 100%; /* Full width for text on small screens */
+        text-align: center; /* Center text */
+    }
+
+    .partner-image-container {
+        width: 100%; /* Full width for image on small screens */
+        margin-top: 20px; /* Add some space above the image */
+    }
+}
