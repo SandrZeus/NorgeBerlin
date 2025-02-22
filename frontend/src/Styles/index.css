@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+p {
+    color: gray;
+}
+
 body {
     font-family: 'Open Sans';
     line-height: 1.6;

@@ -25,9 +25,10 @@ const Home = () => {
                 <div className="white-block">
                     <div className="home-texts">
                         <h1 style={{ fontFamily: 'Playfair Display', fontWeight: 300 }}>{t("HomeTitle1")}</h1>
-                        <p dangerouslySetInnerHTML={{ __html: t("HomeText1") }}></p>
-                        <p>{t("HomeText2")}</p>
-                        <p>{t("HomeText3")}</p>
+                        <br/>
+                        <p style={{ color: 'black'}} dangerouslySetInnerHTML={{ __html: t("HomeText1") }}></p>
+                        <p style={{ color: 'black'}}>{t("HomeText2")}</p>
+                        <p style={{ color: 'black'}}>{t("HomeText3")}</p>
                     </div>
                     <div className="home-images">
                         <img src={HomeImage1} />
@@ -52,10 +53,10 @@ const Home = () => {
                 <div className='home-block'>
                     <div className='home-block-texts'>
                         <h2 style={{fontWeight: 500, fontStyle: 'italic', color: 'balck'}}>"{t("HomeQuote")}"</h2>
-                        <p style={{ color: 'gray'}}>{t("HomeText5")}</p>
-                        <p style={{ color: 'gray'}}>{t("HomeText6")}</p>
-                        <p style={{ color: 'gray'}}>{t("HomeText7")}</p>
-                        <p style={{ color: 'gray'}}>{t("HomeText8")}</p>
+                        <p>{t("HomeText5")}</p>
+                        <p>{t("HomeText6")}</p>
+                        <p>{t("HomeText7")}</p>
+                        <p>{t("HomeText8")}</p>
                     </div>
                     <div className='home-images'>
                         <img src={ProfilePic} />
