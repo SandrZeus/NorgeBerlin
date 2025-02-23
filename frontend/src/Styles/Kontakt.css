@@ -1,0 +1,84 @@
+.kontakt-form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input,
+textarea {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+  width: 500px;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #007bff; 
+  outline: none;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-bottom: 10px;
+}
+
+.kontakt-button {
+  padding: 10px;
+  background-color: #e53132;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 230px;
+  margin-top: 15px;
+  font-style: italic;
+}
+
+.kontakt-button:hover {
+  background-color: #b12424;
+}
+
+@media (max-width: 768px) {
+    input,
+    textarea {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .kontakt-button {
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .kontakt-form {
+      max-width: 100%;
+      padding: 0 15px;
+    }
+  
+    label {
+      font-size: 14px;
+    }
+  
+    input,
+    textarea {
+      font-size: 14px;
+      padding: 8px;
+    }
+  
+    .kontakt-button {
+      font-size: 14px;
+      padding: 8px;
+    }
+  }

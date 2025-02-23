@@ -37,6 +37,30 @@ const CreateNewsForm = ({ refreshPosts }) => {
     }));
   };
 
+  // Function to handle drag start
+  const handleDragStart = (index) => (e) => {
+    e.dataTransfer.setData("text/plain", index);
+  };
+
+  // Function to handle drag over
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  // Function to handle drop
+  const handleDrop = (e, index) => {
+    e.preventDefault();
+    const draggedIndex = e.dataTransfer.getData("text/plain");
+    const draggedFile = formData.files[draggedIndex];
+
+    // Reorder files array
+    const newFiles = [...formData.files];
+    newFiles.splice(draggedIndex, 1); // Remove the dragged file
+    newFiles.splice(index, 0, draggedFile); // Insert it at the new position
+
+    setFormData((prev) => ({ ...prev, files: newFiles }));
+  };
+
   return (
     <div>
       <h2>{t("createNews")}</h2>
@@ -160,19 +184,26 @@ const CreateNewsForm = ({ refreshPosts }) => {
           onChange={handleFileChange}
         />
         {formData.files.length > 0 && (
-          <ul>
-            {formData.files.map((file, index) => (
-              <li key={index}>
-                <span>{file.name}</span>
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt={file.name}
-                  style={{ width: "50px", height: "50px", objectFit: "cover" }}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul>
+          {formData.files.map((file, index) => (
+            <li
+              key={index}
+              draggable
+              onDragStart={handleDragStart(index)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, index)}
+              style={{ display: "flex", alignItems: "center", margin: "5px 0" }}
+            >
+              <span>{file.name}</span>
+              <img
+                src={URL.createObjectURL(file)}
+                alt={file.name}
+                style={{ width: "50px", height: "50px", objectFit: "cover", marginLeft: "10px" }}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
 
         <label>
           <input
