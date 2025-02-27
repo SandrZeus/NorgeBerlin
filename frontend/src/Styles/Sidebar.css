@@ -12,34 +12,82 @@
 
 .sidebar {
   width: 30%;
-  background: #f5f5f5;
+  background: #ffffff;
   padding: 20px;
   border-radius: 10px;
 }
 
-.follow-us,
-.latest-news,
-.advertisement {
-  margin-bottom: 20px;
+.container {
+  margin-top: 20px;
+  padding: 10px;
+  border: solid 1px gray;
+  border-radius: 10px;
 }
 
-.follow-us a,
-.latest-news a {
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 2;
+}
+
+.sidebar-item {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  width: 150;
+  height: 150px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  overflow: hidden;
   text-decoration: none;
-  color: #333;
-  font-weight: bold;
+  color: black;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.follow-us a svg {
-  margin-right: 8px;
+.sidebar-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.15);
 }
 
-.advertisement img {
+.sidebar-image {
+  height: 75px;
+  width: 100px;
+  object-fit: cover;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sidebar-date {
+  font-size: 12px;
+  color: gray;
+}
+
+.sidebar-title {
+  color: #28348a;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.sidebar-text {
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 6em;
+}
+
+.facebook-plugin {
   width: 100%;
-  border-radius: 10px;
+  overflow: hidden;
 }
 
 @media (max-width: 999px) {
